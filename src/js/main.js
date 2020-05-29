@@ -25,8 +25,11 @@ let startBtn = document.getElementById('start'),
 
 
 let money,
-    sumExpenses,
     time;
+
+expensesBtn.disabled = true;
+optionalExpensesBtn.disabled = true;
+countBtn.disabled = true;
 
 let appData = {
     budget: money,
@@ -35,13 +38,14 @@ let appData = {
     optionalExpenses: {},
     income: [],
     savings: false,
-    clicked: false,
 };
 
 startBtn.addEventListener('click', function() {
     time = prompt("Введите дату в формате YYYY-MM-DD", '');
     money = +prompt("Ваш бюджет на месяц?", '');
-    appData.clicked = true;
+    expensesBtn.disabled = false;
+    optionalExpensesBtn.disabled = false;
+    countBtn.disabled = false;
 
 
     while (isNaN(money) || money == '' || money == null) {
@@ -57,7 +61,6 @@ startBtn.addEventListener('click', function() {
 
 
 expensesBtn.addEventListener('click', function() {
-    if (appData.clicked == true) {
     let sum = 0;    
 
 
@@ -74,26 +77,21 @@ expensesBtn.addEventListener('click', function() {
         }  
     }      
     expensesValue.textContent = sum;
-    sumExpenses = sum;
-    }
 });
 
 optionalExpensesBtn.addEventListener('click', function() {
-    if (appData.clicked == true) {
     let i = 0;
     while(i < optionalExpensesItem.length) {        
         let opt = optionalExpensesItem[i].value;
         appData.optionalExpenses[i] = opt;
         optionalExpensesValue.textContent += appData.optionalExpenses[i] + ' ';
         i++;
-        }
-    }
+        }    
 });
 
 countBtn.addEventListener('click', function() {
-    if (appData.clicked == true) {
     if(appData.budget != undefined) {
-        appData.moneyPerDay = ((appData.budget - sumExpenses) / 30).toFixed();
+        appData.moneyPerDay = ((appData.budget - +expensesValue.textContent) / 30).toFixed();
         dayBudgetValue.textContent = appData.moneyPerDay;
     
         if(appData.moneyPerDay <100) {
@@ -108,8 +106,7 @@ countBtn.addEventListener('click', function() {
     }
     else {
         dayBudgetValue.textContent = 'Произошла ошибка';
-        }
-    }
+        }    
 });
 
 incomeItem.addEventListener('input', function() {
